@@ -24,7 +24,7 @@ public class CarroDAO {
         try {
             PessoaServicos pessoaS = ServicosFactory.getPessoaServicos();
             Connection con = Conexao.getConexao();
-            String sql = "insert into carros values(null,?,?,?,?,?,?,?,?)";
+            String sql = "insert into carros values(null,?,?,?,?,?,?,?,?,?)";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, cVO.getPlaca());
             pst.setString(2, cVO.getMarca());
@@ -46,7 +46,7 @@ public class CarroDAO {
         ArrayList<Carro> carros = new ArrayList<>();
         try {
             Connection con = Conexao.getConexao();
-            String sql = "select catrro.*, pessoa.cpf as cpf from carros join pessoa using idPessoa";
+            String sql = "select carros.*, pessoas.cpf as cpf from carros join pessoas on carros.proprietario = pessoas.idpessoa";
             PreparedStatement pst = con.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {//lado do java  ||  lado do banco
@@ -54,16 +54,16 @@ public class CarroDAO {
                 c.setPlaca(rs.getString("placa"));
                 c.setMarca(rs.getString("marca"));
                 c.setModelo(rs.getString("modelo"));
-                c.setAnoMod(rs.getInt("ano mod"));
-                c.setAnoFab(rs.getInt("ano fab"));
+                c.setAnoMod(rs.getInt("anoMod"));
+                c.setAnoFab(rs.getInt("anoFab"));
                 c.setCor(rs.getNString("cor"));
-                c.setTpCambio(rs.getString("cambio"));
+                c.setTpCambio(rs.getString("tpCambio"));
                 c.setCombustivel(rs.getString("combustivel"));
                 c.setProprietario(pessoaS.getPessoaByDoc(rs.getString("cpf")));
                 carros.add(c);
             }
         } catch (SQLException e) {
-            System.out.println("Não deu camarada!!\n");
+            System.out.println("Não deu camarada!!\n"+e.getMessage());
         }
         return carros;
     }
@@ -89,7 +89,7 @@ public class CarroDAO {
                 c.setProprietario(pessoaS.getPessoaByDoc(rs.getString("cpf")));
             }
         } catch (SQLException e) {
-            System.out.println("Não deu camarada!!\n");
+            System.out.println("Não deu camarada!!\n"+e.getMessage());
         }
         return c;
     }//fim do get carro
@@ -111,7 +111,7 @@ public class CarroDAO {
             pst.setInt(9, pessoaS.getPessoaByDoc(cVO.getProprietario().getCpf()).getIdPessoa());
             pst.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Não deu camarada!!\n");
+            System.out.println("Não deu camarada!!\n"+e.getMessage());
         }
     }//fim do atualiza carro
 
@@ -123,7 +123,7 @@ public class CarroDAO {
             pst.setString(1, placa);
             pst.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Não deu camarada!!\n");
+            System.out.println("Não deu camarada!!\n"+e.getMessage());
 
         }//fim de delete
     }//fim do deleta carro

@@ -3,8 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/182120013/Documents/NetBeansProjects/inf3n212-Carro_POODAOJF/src/controller/CCarro.java</file>
+            <file>file:/C:/Users/182120013/Documents/NetBeansProjects/inf3n212-Carro_POODAOJF/src/inf3n212/carro/inf3n212.java</file>
             <file>file:/C:/Users/182120013/Documents/NetBeansProjects/inf3n212-Carro_POODAOJF/src/view/JFCarro.java</file>
+            <file>file:/C:/Users/182120013/Documents/NetBeansProjects/inf3n212-Carro_POODAOJF/src/conexao/Conexao.java</file>
             <file>file:/C:/Users/182120013/Documents/NetBeansProjects/inf3n212-Carro_POODAOJF/src/view/JFPessoa.java</file>
+            <file>file:/C:/Users/182120013/Documents/NetBeansProjects/inf3n212-Carro_POODAOJF/src/servicos/CarroServicos.java</file>
+            <file>file:/C:/Users/182120013/Documents/NetBeansProjects/inf3n212-Carro_POODAOJF/src/dao/CarroDAO.java</file>
         </group>
     </open-files>
 </project-private>

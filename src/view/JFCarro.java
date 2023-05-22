@@ -26,7 +26,10 @@ public class JFCarro extends javax.swing.JFrame {
         initComponents();
         jbDeletar.setVisible(false);
         this.setLocationRelativeTo(null);
+        addRowToTable();
+
     }
+    public static String jfcambio2;
 
     public boolean validInputs() {
         if (jfplaca.getText().equals("")) {
@@ -127,7 +130,7 @@ public class JFCarro extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jlprop = new javax.swing.JLabel();
+        jfprop = new javax.swing.JLabel();
         jfcombustivel = new javax.swing.JComboBox<>();
         jfmanual = new javax.swing.JRadioButton();
         jfautomatico = new javax.swing.JRadioButton();
@@ -143,6 +146,11 @@ public class JFCarro extends javax.swing.JFrame {
                 jfproprietarioFocusLost(evt);
             }
         });
+        jfproprietario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jfproprietarioActionPerformed(evt);
+            }
+        });
         jfproprietario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jfproprietarioKeyTyped(evt);
@@ -153,6 +161,11 @@ public class JFCarro extends javax.swing.JFrame {
         jfanofab.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jfanofabFocusLost(evt);
+            }
+        });
+        jfanofab.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jfanofabActionPerformed(evt);
             }
         });
         jfanofab.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -256,17 +269,32 @@ public class JFCarro extends javax.swing.JFrame {
 
         jLabel10.setText("Combustivel");
 
-        jlprop.setText("    ");
-        jlprop.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jfprop.setText("    ");
+        jfprop.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jfcombustivel.setMaximumRowCount(3);
         jfcombustivel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione...", "Álcool", "Gasolina", "Gás", "Flex", "Diesel" }));
+        jfcombustivel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jfcombustivelActionPerformed(evt);
+            }
+        });
 
         jfcambio.add(jfmanual);
         jfmanual.setText("Manual");
+        jfmanual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jfmanualActionPerformed(evt);
+            }
+        });
 
         jfcambio.add(jfautomatico);
         jfautomatico.setText("Automático");
+        jfautomatico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jfautomaticoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -309,7 +337,7 @@ public class JFCarro extends javax.swing.JFrame {
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel7)
                                             .addComponent(jLabel8)
-                                            .addComponent(jlprop, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(jfprop, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(26, 26, 26)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -372,7 +400,7 @@ public class JFCarro extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jfproprietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
-                    .addComponent(jlprop))
+                    .addComponent(jfprop))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jffechar)
@@ -422,18 +450,17 @@ public class JFCarro extends javax.swing.JFrame {
             int anoFab = Integer.parseInt(jfanofab.getText());
             int anoMod = Integer.parseInt(jfanomod.getText());
             String cor = jfcor.getText().toUpperCase();
-            String cambio = jfcambio.getSelection().toString();
+            String cambio = jfcambio2.toUpperCase();
             String combustivel = jfcombustivel.getSelectedItem().toString();
             Pessoa proprietario = pessoaS.getPessoaByDoc(jfproprietario.getText());
             Carro c = new Carro(placa, marca, modelo, anoFab, anoMod, cor, cambio, combustivel, proprietario);
-            carroS.cadastroCarro(c);
             if (jbSalvar.getText().equals("Salvar")) {
                 carroS.cadastroCarro(c);
             } else {
                 carroS.atualizarCarro(c);
             }
             addRowToTable();
-            limparCampos();
+            jbLimpar.doClick();
 
         }
     }//GEN-LAST:event_jbSalvarActionPerformed
@@ -444,7 +471,7 @@ public class JFCarro extends javax.swing.JFrame {
         String placa = (String) jtCarros.getValueAt(linha, 0);
         CarroServicos carroS = ServicosFactory.getCarroServicos();
         Object[] btnMSG = {"Sim", "Não"};
-        int resp = JOptionPane.showOptionDialog(this, "Deseja realmente deletar " + placa, "Deletar Pessoa", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, btnMSG, btnMSG[0]);
+        int resp = JOptionPane.showOptionDialog(this, "Deseja realmente deletar " + placa, "Deletar Carro", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, btnMSG, btnMSG[0]);
         if (resp == 0) {
             carroS.deletarCarro(placa);
             addRowToTable();
@@ -465,6 +492,27 @@ public class JFCarro extends javax.swing.JFrame {
         jbDeletar.setVisible(false);
         jbSalvar.setText("Confirmar");
         jbLimpar.setText("Cancelar");
+        jfplaca.setEnabled(false);
+
+        int linha = jtCarros.getSelectedRow();
+        String placa = (String) jtCarros.getValueAt(linha, 0);
+        CarroServicos carroS = ServicosFactory.getCarroServicos();
+        Carro c = carroS.getCarroByDoc(placa);
+        jfproprietario.setText(c.getProprietario().getCpf());
+        jfplaca.setText(c.getPlaca());
+        jfanofab.setText(Integer.toString(c.getAnoFab()));
+        jfanomod.setText(Integer.toString(c.getAnoMod()));
+        jfcor.setText(c.getCor());
+        jfmarca.setText(c.getMarca());
+        jfmodelo.setText(c.getModelo());
+        jfcombustivel.setSelectedItem(c.getCombustivel());
+        jfprop.setText(c.getProprietario().getNome());
+
+        if (c.getTpCambio().equalsIgnoreCase("Manual")) {
+            jfmanual.setSelected(true);
+        } else {
+            jfautomatico.setSelected(true);
+        }
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jtCarrosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtCarrosMouseClicked
@@ -479,28 +527,30 @@ public class JFCarro extends javax.swing.JFrame {
 
     private void jfproprietarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jfproprietarioFocusLost
         // TODO add your handling code here:
-        PessoaServicos pessoaS = ServicosFactory.getPessoaServicos();
-        String cpf, nome;
-        cpf = jfproprietario.getText();
-        if (Validadores.isCPF(cpf)) {
-            nome = pessoaS.getPessoaByDoc(cpf).getNome();
-            if (nome == null) {
-                JOptionPane.showMessageDialog(this, "Pessoa não existe");
-                jfproprietario.requestFocus();
-            } else {
-                Object[] btnMSG = {"Sim", "Não"};
-                int resp = JOptionPane.showOptionDialog(this, "Tem certeza que " + nome + " é o proprietário?", " Propiretário ", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, btnMSG, btnMSG[0]);
-                if (resp == 0) {
-                    jlprop.setText(nome);
-                } else {
+        if (!jfproprietario.getText().equals("")) {
+            PessoaServicos pessoaS = ServicosFactory.getPessoaServicos();
+            String cpf, nome;
+            cpf = jfproprietario.getText();
+            if (Validadores.isCPF(cpf)) {
+                nome = pessoaS.getPessoaByDoc(cpf).getNome();
+                if (nome == null) {
+                    JOptionPane.showMessageDialog(this, "Pessoa não existe");
                     jfproprietario.requestFocus();
-                    jfproprietario.setText("");
-                }
+                } else {
+                    Object[] btnMSG = {"Sim", "Não"};
+                    int resp = JOptionPane.showOptionDialog(this, "Tem certeza que " + nome + " é o proprietário?", " Propiretário ", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, btnMSG, btnMSG[0]);
+                    if (resp == 0) {
+                        jfprop.setText(nome);
+                    } else {
+                        jfproprietario.requestFocus();
+                        jfproprietario.setText("");
+                    }
 
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "cpf invalido");
+                jfproprietario.requestFocus();
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "cpf invalido");
-            jfproprietario.requestFocus();
         }
     }//GEN-LAST:event_jfproprietarioFocusLost
 
@@ -536,19 +586,45 @@ public class JFCarro extends javax.swing.JFrame {
             String num = "0123456789";
             if (!num.contains(evt.getKeyChar() + "")) {
                 evt.consume();
-            } else {
-                evt.consume();
             }
+        } else {
+            evt.consume();
         }
     }//GEN-LAST:event_jfanofabKeyTyped
 
     private void jfanomodKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jfanomodKeyTyped
         // TODO add your handling code here:
-        String num = "0123456789";
-        if (!num.contains(evt.getKeyChar() + "")) {
+       if (jfanomod.getText().length() < 4) {
+            String num = "0123456789";
+            if (!num.contains(evt.getKeyChar() + "")) {
+                evt.consume();
+            }
+        } else {
             evt.consume();
         }
     }//GEN-LAST:event_jfanomodKeyTyped
+
+    private void jfautomaticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jfautomaticoActionPerformed
+        // TODO add your handling code here:
+        jfcambio2 = evt.getActionCommand();
+    }//GEN-LAST:event_jfautomaticoActionPerformed
+
+    private void jfmanualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jfmanualActionPerformed
+        // TODO add your handling code here:
+        jfcambio2 = evt.getActionCommand();
+    }//GEN-LAST:event_jfmanualActionPerformed
+
+    private void jfproprietarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jfproprietarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jfproprietarioActionPerformed
+
+    private void jfcombustivelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jfcombustivelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jfcombustivelActionPerformed
+
+    private void jfanofabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jfanofabActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jfanofabActionPerformed
     public void limparCampos() {
         jfplaca.setText("");
         jfmarca.setText("");
@@ -560,7 +636,7 @@ public class JFCarro extends javax.swing.JFrame {
         //jfcombustivel.setSelectedItem("Selecione..."); também funciona, mas o texto referido tem de ser identico ao texto do menu.
         jfproprietario.setText("");
         jfcor.setText("");
-        jlprop.setText(" ");
+        jfprop.setText(" ");
     }
 
     /**
@@ -627,8 +703,8 @@ public class JFCarro extends javax.swing.JFrame {
     private javax.swing.JTextField jfmarca;
     private javax.swing.JTextField jfmodelo;
     private javax.swing.JFormattedTextField jfplaca;
+    private javax.swing.JLabel jfprop;
     private javax.swing.JTextField jfproprietario;
-    private javax.swing.JLabel jlprop;
     private javax.swing.JTable jtCarros;
     // End of variables declaration//GEN-END:variables
 }
